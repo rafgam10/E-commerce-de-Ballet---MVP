@@ -16,13 +16,18 @@ class Usuario(db.Model):
     nome = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
     senha = db.Column(db.String(255), nullable=False)
-    role = db.Column(db.String(10), nullable=False, default=Role.CLIENTE)
-    created_at = db.Column(db.DateTime, default=datetime.now)
+    role = db.Column(db.String(10), nullable=False, default=Role.CLIENTE.value)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    enderecos = db.relationship('Endereco', backref="usuarios")
+    enderecos = db.relationship(
+        'Endereco',
+        backref="usuarios",
+        lazy=True,
+        cascade="all, delete-orphan"    
+    )
     
     
-    def __init__(self, nome, email, senha, role):
+    def __init__(self, nome, email, senha, role=Role.CLIENTE.value):
         self.nome = nome
         self.email = email
         self.senha = senha
@@ -32,4 +37,10 @@ class Usuario(db.Model):
         return f"Usuario: {self.nome} - {self.email} - {self.role} - {self.created_at}"
     
     def __to_dict__(self):
-        ...
+        return {
+            "id": self.id,
+            "nome": self.nome,
+            "email": self.email,
+            "role": self.role,
+            "created_at": self.created_at
+        }

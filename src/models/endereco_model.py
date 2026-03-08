@@ -20,11 +20,10 @@ class Endereco(db.Model):
     cidade = db.Column(db.String(255), nullable=False)
     estado = db.Column(db.String(255), nullable=False)
     cep = db.Column(db.String(8), nullable=False)
-    pais = db.Column(db.String(255), default=Pais.BRASIL, nullable=False)
+    pais = db.Column(db.String(255), default=Pais.BRASIL.value, nullable=False)
     
     user_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
-    
-    usuarios = db.relationship('Usuario')
+
     
     def __init__(self, rua, numero, cidade, estado, cep, pais):
         self.rua = rua

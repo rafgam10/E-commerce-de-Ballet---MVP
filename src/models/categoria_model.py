@@ -8,6 +8,8 @@ class Categoria(db.Model):
     nome = db.Column(db.String(255), nullable=False)
     slug = db.Column(db.String(255), nullable=False)
     
+    produtos = db.relationship('Produto', backref="categoria", lary=True)
+    
     def __init__(self, nome, slug):
         self.nome = nome
         self.slug = slug

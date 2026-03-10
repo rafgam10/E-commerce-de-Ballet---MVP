@@ -24,6 +24,12 @@ class Endereco(db.Model):
     
     user_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
 
+    ordens = db.relationship(
+        'Ordens',
+        backref='enderecos',
+        lazy=True,
+        cascade='all, delete-orphan'
+    )
     
     def __init__(self, rua, numero, cidade, estado, cep, pais):
         self.rua = rua

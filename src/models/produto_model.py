@@ -17,4 +17,16 @@ class Produto(db.Model):
     
     categoria_id = db.Column(db.Integer, db.ForeignKey('categorias.id'), nullable=False)
     
+    variates = db.relationship(
+        'Produto_Variavel',
+        backref="variaveis",
+        lazy=True,
+        cascade="all, delete-orphan"
+    )
     
+    images = db.relationship(
+        'Produto_Images',
+        backref='images',
+        lazy=True,
+        cascade="all, delete-orphan"
+    )

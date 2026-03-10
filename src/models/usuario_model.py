@@ -26,6 +26,19 @@ class Usuario(db.Model):
         cascade="all, delete-orphan"    
     )
     
+    carrinhos = db.relationship(
+        'Carrinhos',
+        backref='usuarios',
+        lazy=True,
+        cascade='all, delete-orphan'
+    )
+    
+    ordens = db.relationship(
+        'Ordens',
+        backref='usuarios',
+        lazy=True,
+        cascade='all, delete-orphan'
+    )
     
     def __init__(self, nome, email, senha, role=Role.CLIENTE.value):
         self.nome = nome

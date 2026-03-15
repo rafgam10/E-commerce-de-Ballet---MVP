@@ -10,3 +10,4 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = "views/static/uploads"
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+    ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp", "svg"}

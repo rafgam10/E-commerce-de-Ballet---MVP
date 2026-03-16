@@ -1,8 +1,8 @@
 # E-commerce de Ballet - MVP
 
-## Link do Design Figma.
+## Link do Design.
 
-https://www.figma.com/design/91jWqf6KQl65SQ3FSUzJC6/eCommerce-Template---SimpleWood-Theme--Full--Magento-2---Community-?node-id=0-1&p=f&t=7szV2DrmqjuVW0f8-0
+https://stitch.withgoogle.com/projects/14858003210999483372?pli=1
 
 ---
 

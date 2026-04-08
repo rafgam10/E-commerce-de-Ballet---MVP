@@ -13,3 +13,4 @@ build/
 
 # Pasta de Tests.
 /tests
+src/tests/**.py

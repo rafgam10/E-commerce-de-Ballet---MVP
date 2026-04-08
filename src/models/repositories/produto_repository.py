@@ -12,9 +12,17 @@ class ProdutoRepository(IProduto):
         db.session.add(novo_produto)
         db.session.commit()
     
-    def editar_produto(self, id_produto:int, data: dict) -> None:
+    def editar_produto(self, id_produto: int, data: dict) -> None:
         produto = db.session.query(Produto).filter(Produto.id == id_produto).first()
-        ...
+        
+        if not produto:
+            raise Exception("Produto não encontrado")
+        
+        for key, value in data.items():
+            if hasattr(produto, key):
+                setattr(produto, key, value)
+        
+        db.session.commit()
         
     def deletar_produto(self, id_produto:int) -> None:
         produto = db.session.query(Produto).filter(Produto.id == id_produto).first()

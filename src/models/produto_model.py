@@ -30,3 +30,11 @@ class Produto(db.Model):
         lazy=True,
         cascade="all, delete-orphan"
     )
+    
+    def __init__(self, nome, slug, descricao, price, ativo, categoria_id):
+        self.nome = nome
+        self.slug = slug
+        self.descricao = descricao
+        self.price = price
+        self.ativo = ativo
+        self.categoria_id = categoria_id

@@ -10,3 +10,6 @@ build/
 *.egg-info/
 .idea/
 .vscode/
+
+# Pasta de Tests.
+/tests

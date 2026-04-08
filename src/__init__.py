@@ -1,6 +1,8 @@
 from flask import Flask
 from .settings.config import Config
-from .settings.extensions import db, migrate
+from .settings.extensions import db, migrate, login_manager
+
+import os
 
 def create_app():
     app = Flask(
@@ -9,9 +11,12 @@ def create_app():
         static_folder="views/static",
     )
     app.config.from_object(Config)
-
+    
+    os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True)
+    
     db.init_app(app)
     migrate.init_app(app, db)
+    login_manager.init_app(app)
 
     # Importações de Models:
     from src.models.usuario_model import Usuario
@@ -26,9 +31,9 @@ def create_app():
     from src.models.itens_order import Itens_Order
         
     # Importações de Blueprintes:
-        
-    from .routes import register_routes
-    register_routes(app)
+    from src.routes.auth_route import auth_bp
+    
+    app.register_blueprint(auth_bp)
 
 
     return app

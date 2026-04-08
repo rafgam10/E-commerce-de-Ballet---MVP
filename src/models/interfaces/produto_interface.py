@@ -10,3 +10,9 @@ class IProduto(ABC):
     
     @abstractmethod
     def deletar_produto() -> None: pass
+    
+    @abstractmethod
+    def adicionar_img_produto() -> None: pass
+    
+    @abstractmethod
+    def criar_variaveis_produto() -> None: pass

@@ -16,3 +16,6 @@ class UsuarioInterface(ABC):
     
     @abstractmethod
     def get_all_admin() -> None: pass
+    
+    @abstractmethod
+    def atualizar_usuario() -> None: pass

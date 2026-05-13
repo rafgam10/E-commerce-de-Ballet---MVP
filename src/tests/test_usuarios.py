@@ -18,6 +18,17 @@ def test_criar_usuario():
             email="teste@gmail.com",
             senha="teste123"
         )
+
+@pytest.mark.skip(reason="Passou")
+def test_recuperar_senha():
+    
+    app = create_app()
+    
+    with app.app_context():
+        db.create_all()
+        repo = UsuarioRepository()
+        
+        repo.recuperar_senha("teste@gmail.com", "teste12345")
       
 @pytest.mark.skip(reason="Passou")  
 def test_get_usuario():

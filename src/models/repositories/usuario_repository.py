@@ -13,6 +13,16 @@ class UsuarioRepository(UsuarioInterface):
 
         return usuario
 
+    def recuperar_senha(self, email:str, nova_senha:str):
+        usuario = db.session.query(Usuario).filter(Usuario.email == email).first()
+        
+        usuario.senha = nova_senha
+        db.session.commit()
+        return usuario
+    
+    def atualizar_usuario(self):
+        ...
+    
     def get_usuario(self, email: str, senha: str):
 
         usuario_select = db.session.query(Usuario).filter(

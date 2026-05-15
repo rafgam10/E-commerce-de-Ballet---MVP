@@ -1,3 +1,5 @@
+import bcrypt
+
 from src.models.interfaces.usuario_interface import UsuarioInterface
 from src.models.usuario_model import Usuario, Role
 from src.settings.extensions import db
@@ -6,7 +8,9 @@ from src.settings.extensions import db
 class UsuarioRepository(UsuarioInterface):
 
     def criar_usuario(self, nome: str, email: str, senha: str, role=Role.CLIENTE.value) -> Usuario:
-        usuario = Usuario(nome, email, senha, role)
+        senha_hash = bcrypt.hashpw(senha.encode(), bcrypt.gensalt()).decode()
+        
+        usuario = Usuario(nome, email, senha_hash, role)
 
         db.session.add(usuario)
         db.session.commit()
@@ -23,28 +27,23 @@ class UsuarioRepository(UsuarioInterface):
     def atualizar_usuario(self):
         ...
     
-    def get_usuario(self, email: str, senha: str):
+    def get_usuario(self, email: str):
 
-        usuario_select = db.session.query(Usuario).filter(
-            Usuario.email == email,
-            Usuario.senha == senha
+        usuario = db.session.query(Usuario).filter(
+            Usuario.email == email
         ).first()
 
-        if usuario_select:
-            return usuario_select.__to_dict__()
-
-        return None
+        return usuario
 
     def get_all_usuarios(self) -> list[dict]:
 
         usuarios = db.session.query(Usuario).all()
         return [user.__to_dict__() for user in usuarios]
 
-    def get_admin(self, email: str, senha: str):
+    def get_admin(self, email: str):
 
         admin = db.session.query(Usuario).filter(
             Usuario.email == email,
-            Usuario.senha == senha,
             Usuario.role == Role.ADMIN.value
         ).first()
 

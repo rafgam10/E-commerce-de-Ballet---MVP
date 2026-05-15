@@ -2,21 +2,27 @@ from src.settings.extensions import db
 from datetime import datetime
 from enum import Enum
 
+from flask_login import UserMixin
+
 
 class Role(Enum):
     ADMIN = 'admin'
     CLIENTE = 'cliente'
+    
+class StatusActive(Enum):
+    ATIVO = 'ativo'
+    BLOQUEIO = 'bloqueio'
 
-
-class Usuario(db.Model):
+class Usuario(UserMixin, db.Model):
     
     __tablename__="usuarios"
     
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
-    senha = db.Column(db.String(255), nullable=False)
+    senha = db.Column(db.String(255), nullable=False, unique=True)
     role = db.Column(db.String(10), nullable=False, default=Role.CLIENTE.value)
+    # statusActive = db.Column(db.String(10), nullable=False, default=StatusActive.ATIVO.value)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     enderecos = db.relationship(
@@ -54,6 +60,7 @@ class Usuario(db.Model):
             "id": self.id,
             "nome": self.nome,
             "email": self.email,
+            "senha": self.senha,
             "role": self.role,
             "created_at": self.created_at
         }

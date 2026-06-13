@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Pedido #{{ pedido.id }} - Ballet Boutique{% endblock %}
+
+{% block content %}
+<section class="page-title">
+  <p class="eyebrow">Pedido #{{ pedido.id }}</p>
+  <h1>Status: {{ pedido.status }}</h1>
+  <p>Total: <strong>{{ pedido.preco_total|brl }}</strong></p>
+</section>
+
+<div class="cart-layout">
+  <section class="cart-items">
+    {% for item in pedido.itens_ordens %}
+      <article class="cart-item">
+        <div class="image-placeholder small">Ballet</div>
+        <div>
+          <h3>{{ item.nome_produto or item.variavel_produtos.variaveis.nome }}</h3>
+          <p>{{ item.tamanho or item.variavel_produtos.tamanho }} - {{ item.cor or item.variavel_produtos.cor }} - SKU {{ item.sku or item.variavel_produtos.sku }}</p>
+          <p>{{ item.quantidade }} unidade(s) x {{ item.preco|brl }}</p>
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+  <aside class="summary-card">
+    <h2>Entrega</h2>
+    <p>{{ pedido.enderecos.rua }}, {{ pedido.enderecos.numero }}</p>
+    <p>{{ pedido.enderecos.cidade }}/{{ pedido.enderecos.estado }} - {{ pedido.enderecos.cep }}</p>
+    <a class="btn btn-secondary" href="{{ url_for('store.pedidos') }}">Voltar aos pedidos</a>
+  </aside>
+</div>
+{% endblock %}

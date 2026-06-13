@@ -1,0 +1,31 @@
+<div class="product-grid">
+  {% for produto in produtos %}
+    <article class="product-card">
+      {% set estoque_total = produto.variates|sum(attribute='estoque') %}
+      <a class="product-media" href="{{ url_for('store.detalhe_produto', slug=produto.slug) }}">
+        {% if produto.imagem_principal() %}
+          <img src="{{ produto.imagem_principal() }}" alt="{{ produto.nome }}">
+        {% else %}
+          <div class="image-placeholder">Ballet</div>
+        {% endif %}
+        {% if estoque_total <= 0 %}
+          <span class="product-badge badge-muted">Esgotado</span>
+        {% elif estoque_total <= 3 %}
+          <span class="product-badge">Últimas unidades</span>
+        {% else %}
+          <span class="product-badge badge-soft">Pronta entrega</span>
+        {% endif %}
+      </a>
+      <div class="product-card-body">
+        <p class="eyebrow">{{ produto.categoria.nome if produto.categoria else 'Produto' }}</p>
+        <h3><a href="{{ url_for('store.detalhe_produto', slug=produto.slug) }}">{{ produto.nome }}</a></h3>
+        <div class="product-card-footer">
+          <strong>{{ produto.price|brl }}</strong>
+          <span>{{ produto.variates|length }} variação(ões)</span>
+        </div>
+      </div>
+    </article>
+  {% else %}
+    <p class="empty-state">Nenhum produto encontrado.</p>
+  {% endfor %}
+</div>

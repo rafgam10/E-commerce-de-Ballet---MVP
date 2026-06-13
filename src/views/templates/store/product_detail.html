@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}{{ produto.nome }} - Ballet Boutique{% endblock %}
+
+{% block content %}
+<section class="product-detail">
+  <div class="product-gallery">
+    {% if produto.imagem_principal() %}
+      {% for imagem in produto.images %}
+        {% if imagem.url %}
+          <img src="{{ imagem.url }}" alt="{{ produto.nome }}">
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="image-placeholder large">Ballet Boutique</div>
+    {% endif %}
+  </div>
+  <div class="product-info">
+    <p class="eyebrow">{{ produto.categoria.nome if produto.categoria else 'Produto' }}</p>
+    <h1>{{ produto.nome }}</h1>
+    <p class="price">{{ produto.price|brl }}</p>
+    <p>{{ produto.descricao or 'Produto selecionado para bailarinas em treino, aula ou apresentação.' }}</p>
+    <div class="product-detail-highlights">
+      <span>Troca manual combinada</span>
+      <span>Estoque por variação</span>
+      <span>Checkout seguro</span>
+    </div>
+
+    <form action="{{ url_for('store.adicionar_carrinho') }}" method="post" class="form-card compact">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Variação
+        <select name="produto_variavel_id" required>
+          {% for variacao in produto.variates %}
+            <option value="{{ variacao.id }}" {% if variacao.estoque <= 0 %}disabled{% endif %}>
+              {{ variacao.tamanho }} - {{ variacao.cor }} - estoque: {{ variacao.estoque }}
+            </option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Quantidade
+        <input type="number" name="quantidade" min="1" value="1" required>
+      </label>
+      <button class="btn btn-primary" type="submit" {% if not produto.variates %}disabled{% endif %}>Adicionar ao carrinho</button>
+    </form>
+  </div>
+</section>
+
+<section class="product-support">
+  <article>
+    <strong>Como escolher?</strong>
+    <p>Confira tamanho e cor antes de adicionar ao carrinho. O estoque exibido é por variação.</p>
+  </article>
+  <article>
+    <strong>Pedido simples</strong>
+    <p>Finalize com endereço e pagamento simulado para registrar o pedido na sua conta.</p>
+  </article>
+</section>
+{% endblock %}

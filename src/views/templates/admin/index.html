@@ -1,0 +1,132 @@
+{% extends "admin/master.html" %}
+
+{% set dashboard = admin_dashboard() %}
+
+{% block body %}
+<div class="admin-dashboard">
+<section class="admin-hero">
+  <div>
+    <p class="admin-kicker">Visão geral</p>
+    <h1>Dashboard da Ballet Boutique</h1>
+    <p>Acompanhe pedidos, estoque e produtos que precisam de atenção.</p>
+  </div>
+  <div class="admin-hero-actions">
+    <a class="btn btn-light" href="{{ url_for('store.home') }}">Ver loja</a>
+    <a class="btn btn-primary" href="{{ url_for('produto.create_view') }}">Novo produto</a>
+  </div>
+</section>
+
+<section class="admin-stat-grid">
+  <article class="admin-stat-card accent-pink">
+    <span>Pedidos pendentes</span>
+    <strong>{{ dashboard.pedidos_pendentes }}</strong>
+    <small>Pedidos aguardando pagamento ou conferência.</small>
+  </article>
+  <article class="admin-stat-card accent-gold">
+    <span>Faturamento</span>
+    <strong>{{ dashboard.faturamento|brl }}</strong>
+    <small>Total de pedidos não cancelados.</small>
+  </article>
+  <article class="admin-stat-card accent-plum">
+    <span>Clientes</span>
+    <strong>{{ dashboard.clientes }}</strong>
+    <small>Contas cadastradas como cliente.</small>
+  </article>
+  <article class="admin-stat-card accent-rose">
+    <span>Produtos ativos</span>
+    <strong>{{ dashboard.produtos_ativos }}</strong>
+    <small>Itens visíveis no catálogo.</small>
+  </article>
+</section>
+
+<section class="admin-panel-grid">
+  <article class="admin-panel wide">
+    <div class="admin-panel-title">
+      <div>
+        <p class="admin-kicker">Pedidos</p>
+        <h2>Pedidos recentes</h2>
+      </div>
+      <a href="{{ url_for('ordens.index_view') }}">Ver todos</a>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Cliente</th>
+            <th>Status</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pedido in dashboard.pedidos_recentes %}
+            <tr>
+              <td>#{{ pedido.id }}</td>
+              <td>{{ pedido.usuarios.nome if pedido.usuarios else 'Cliente' }}</td>
+              <td><span class="admin-status">{{ pedido.status }}</span></td>
+              <td>{{ pedido.preco_total|brl }}</td>
+            </tr>
+          {% else %}
+            <tr><td colspan="4">Nenhum pedido ainda.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <article class="admin-panel">
+    <div class="admin-panel-title">
+      <div>
+        <p class="admin-kicker">Estoque</p>
+        <h2>Baixo estoque</h2>
+      </div>
+      <a href="{{ url_for('produto_variavel.index_view') }}">Gerenciar</a>
+    </div>
+    <div class="admin-list">
+      {% for variacao in dashboard.estoque_baixo %}
+        <div class="admin-list-item">
+          <div>
+            <strong>{{ variacao.variaveis.nome }}</strong>
+            <span>{{ variacao.tamanho }} / {{ variacao.cor }} - {{ variacao.sku }}</span>
+          </div>
+          <b>{{ variacao.estoque }}</b>
+        </div>
+      {% else %}
+        <p>Nenhum item com estoque baixo.</p>
+      {% endfor %}
+    </div>
+  </article>
+
+  <article class="admin-panel">
+    <div class="admin-panel-title">
+      <div>
+        <p class="admin-kicker">Catálogo</p>
+        <h2>Sem imagem</h2>
+      </div>
+      <a href="{{ url_for('produto_images.create_view') }}">Adicionar</a>
+    </div>
+    <div class="admin-list">
+      {% for produto in dashboard.produtos_sem_imagem %}
+        <div class="admin-list-item">
+          <div>
+            <strong>{{ produto.nome }}</strong>
+            <span>{{ produto.categoria.nome if produto.categoria else 'Sem categoria' }}</span>
+          </div>
+        </div>
+      {% else %}
+        <p>Todos os produtos possuem imagem.</p>
+      {% endfor %}
+    </div>
+  </article>
+</section>
+
+<section class="admin-quick-actions">
+  <a href="{{ url_for('categoria.create_view') }}">Criar categoria</a>
+  <a href="{{ url_for('produto.create_view') }}">Criar produto</a>
+  <a href="{{ url_for('produto_variavel.create_view') }}">Criar variação</a>
+  <a href="{{ url_for('produto_images.create_view') }}">Adicionar imagem</a>
+  <a href="{{ url_for('ordens.index_view') }}">Ver pedidos</a>
+  <a href="{{ url_for('store.produtos') }}">Abrir catálogo</a>
+</section>
+</div>
+{% endblock %}

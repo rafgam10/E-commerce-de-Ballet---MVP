@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - Ballet Boutique{% endblock %}
+
+{% block content %}
+<section class="page-title">
+  <p class="eyebrow">Checkout</p>
+  <h1>Finalize seu pedido</h1>
+  <p>Pagamento MVP: PIX/manual simulado. O pedido nasce como pendente.</p>
+</section>
+
+{% if not itens %}
+  <div class="empty-state">
+    <p>Seu carrinho está vazio.</p>
+    <a class="btn btn-primary" href="{{ url_for('store.produtos') }}">Escolher produtos</a>
+  </div>
+{% else %}
+  <div class="checkout-layout">
+    <section class="form-card">
+      <h2>Endereço de entrega</h2>
+      {% if enderecos %}
+        <form method="post" action="{{ url_for('store.confirmar_checkout') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          {% for endereco in enderecos %}
+            <label class="radio-card">
+              <input type="radio" name="endereco_id" value="{{ endereco.id }}" required {% if loop.first %}checked{% endif %}>
+              <span>{{ endereco.rua }}, {{ endereco.numero }} - {{ endereco.cidade }}/{{ endereco.estado }} - {{ endereco.cep }}</span>
+            </label>
+          {% endfor %}
+          <button class="btn btn-primary" type="submit">Confirmar pedido</button>
+        </form>
+      {% else %}
+        <p>Cadastre um endereço para continuar.</p>
+      {% endif %}
+
+      <h3>Novo endereço</h3>
+      <form method="post" action="{{ url_for('store.criar_endereco_checkout') }}" class="address-grid">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label>Rua <input type="text" name="rua" required></label>
+        <label>Número <input type="number" name="numero" required></label>
+        <label>Cidade <input type="text" name="cidade" required></label>
+        <label>Estado <input type="text" name="estado" required maxlength="2"></label>
+        <label>CEP <input type="text" name="cep" required maxlength="9" placeholder="00000-000" inputmode="numeric"></label>
+        <label>País <input type="text" name="pais" value="Brasil"></label>
+        <button class="btn btn-secondary" type="submit">Salvar endereço</button>
+      </form>
+    </section>
+
+    <aside class="summary-card">
+      <h2>Resumo do pedido</h2>
+      {% for item in itens %}
+        {% set variacao = item.variavel_produtos %}
+        {% set produto = variacao.variaveis %}
+        <p>{{ item.quantidade }}x {{ produto.nome }} - {{ variacao.tamanho }}/{{ variacao.cor }}</p>
+      {% endfor %}
+      <strong>Total: {{ total|brl }}</strong>
+    </aside>
+  </div>
+{% endif %}
+{% endblock %}

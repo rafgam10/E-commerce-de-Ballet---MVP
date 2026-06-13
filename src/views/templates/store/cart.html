@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Carrinho - Ballet Boutique{% endblock %}
+
+{% block content %}
+<section class="page-title">
+  <p class="eyebrow">Carrinho</p>
+  <h1>Revise seus produtos</h1>
+</section>
+
+{% if itens %}
+  <div class="cart-layout">
+    <section class="cart-items">
+      {% for item in itens %}
+        {% set variacao = item.variavel_produtos %}
+        {% set produto = variacao.variaveis %}
+        <article class="cart-item">
+          {% if produto.imagem_principal() %}
+            <img src="{{ produto.imagem_principal() }}" alt="{{ produto.nome }}">
+          {% else %}
+            <div class="image-placeholder small">Ballet</div>
+          {% endif %}
+          <div>
+            <h3>{{ produto.nome }}</h3>
+            <p>{{ variacao.tamanho }} - {{ variacao.cor }} - SKU {{ variacao.sku }}</p>
+            <strong>{{ produto.price|brl }}</strong>
+          </div>
+          <form action="{{ url_for('store.atualizar_item_carrinho', item_id=item.id) }}" method="post" class="inline-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="number" name="quantidade" min="0" max="{{ variacao.estoque }}" value="{{ item.quantidade }}">
+            <button class="btn btn-secondary" type="submit">Atualizar</button>
+          </form>
+          <form action="{{ url_for('store.remover_item_carrinho', item_id=item.id) }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-link" type="submit">Remover</button>
+          </form>
+        </article>
+      {% endfor %}
+    </section>
+    <aside class="summary-card">
+      <h2>Resumo</h2>
+      <p>{{ quantidade_itens }} item(ns)</p>
+      <strong>Total: {{ total|brl }}</strong>
+      <a class="btn btn-primary" href="{{ url_for('store.checkout') }}">Finalizar compra</a>
+    </aside>
+  </div>
+{% else %}
+  <div class="empty-state">
+    <p>Seu carrinho está vazio.</p>
+    <a class="btn btn-primary" href="{{ url_for('store.produtos') }}">Ver produtos</a>
+  </div>
+{% endif %}
+{% endblock %}

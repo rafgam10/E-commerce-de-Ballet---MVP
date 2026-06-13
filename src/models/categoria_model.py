@@ -1,18 +1,28 @@
 from src.settings.extensions import db
 
+
 class Categoria(db.Model):
-    
-    __tablename__="categorias"
-    
+
+    __tablename__ = "categorias"
+
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(255), nullable=False)
-    slug = db.Column(db.String(255), nullable=False)
-    
-    produtos = db.relationship('Produto', backref="categoria", lazy=True, cascade="all, delete-orphan")
-    
+    slug = db.Column(db.String(255), nullable=False, unique=True)
+
+    produtos = db.relationship(
+        "Produto", backref="categoria", lazy=True, cascade="all, delete-orphan"
+    )
+
     def __init__(self, nome, slug):
         self.nome = nome
         self.slug = slug
-    
+
     def __repr__(self):
         return f"Categoria: {self.nome} - {self.slug}"
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nome": self.nome,
+            "slug": self.slug,
+        }

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Ballet Boutique - Loja de Ballet{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Moda ballet para treino e palco</p>
+    <h1>Elegância em movimento para cada aula e apresentação.</h1>
+    <p>Collants, sapatilhas, saias e acessórios com variações reais de tamanho, cor e estoque para comprar sem dúvida.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{{ url_for('store.produtos') }}">Ver coleção</a>
+      <a class="btn btn-ghost" href="#categorias">Explorar categorias</a>
+    </div>
+    <div class="hero-metrics">
+      <span><strong>{{ produtos|length }}</strong> destaques</span>
+      <span><strong>{{ categorias|length }}</strong> categorias</span>
+      <span><strong>PIX</strong> simulado</span>
+    </div>
+  </div>
+  <div class="hero-panel">
+    <img class="hero-logo" src="{{ url_for('static', filename='imagens/logo.png') }}" alt="Ballet Boutique">
+    <div class="hero-ticket">
+      <span>Nova coleção</span>
+      <strong>Essenciais de Ballet</strong>
+      <p>Peças com pronta entrega e controle de estoque por variação.</p>
+    </div>
+    <div class="hero-orbit orbit-one">Sapatilhas</div>
+    <div class="hero-orbit orbit-two">Collants</div>
+  </div>
+</section>
+
+<section class="trust-strip">
+  <article>
+    <strong>Compra guiada</strong>
+    <span>Escolha tamanho, cor e quantidade com estoque visível.</span>
+  </article>
+  <article>
+    <strong>Pedido acompanhado</strong>
+    <span>Cliente vê status e detalhes do pedido na conta.</span>
+  </article>
+  <article>
+    <strong>Admin completo</strong>
+    <span>Produtos, imagens, pedidos e estoque no painel.</span>
+  </article>
+</section>
+
+<section class="section-heading" id="categorias">
+  <div>
+    <p class="eyebrow">Categorias</p>
+    <h2>Compre por categoria</h2>
+  </div>
+</section>
+<div class="category-grid">
+  {% for categoria in categorias %}
+    <a class="category-card" href="{{ url_for('store.produtos_por_categoria', slug=categoria.slug) }}">
+      <span>{{ "%02d"|format(loop.index) }}</span>
+      <strong>{{ categoria.nome }}</strong>
+      <small>Ver produtos</small>
+    </a>
+  {% else %}
+    <p>Nenhuma categoria cadastrada ainda.</p>
+  {% endfor %}
+</div>
+
+<section class="section-heading">
+  <div>
+    <p class="eyebrow">Destaques</p>
+    <h2>Escolhas para começar</h2>
+  </div>
+  <a class="section-link" href="{{ url_for('store.produtos') }}">Ver todos</a>
+</section>
+{% include "store/partials/product_grid.html" %}
+{% endblock %}

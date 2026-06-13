@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Produtos - Ballet Boutique{% endblock %}
+
+{% block content %}
+<section class="page-title">
+  <div>
+    <p class="eyebrow">Catálogo</p>
+    <h1>{% if categoria_atual %}{{ categoria_atual.nome }}{% else %}Produtos{% endif %}</h1>
+    <p>Filtre por categoria, tamanho, cor ou faixa de preço.</p>
+  </div>
+  <span class="catalog-count">{{ produtos|length }} produto(s)</span>
+</section>
+
+<form class="filters" method="get" action="{{ url_for('store.produtos') }}">
+  <label class="filter-wide">Buscar
+    <input type="search" name="q" placeholder="Ex: sapatilha rosa" value="{{ filtros.get('q', '') }}">
+  </label>
+  <label>Categoria
+  <select name="categoria">
+    <option value="">Todas as categorias</option>
+    {% for categoria in categorias %}
+      <option value="{{ categoria.slug }}" {% if filtros.get('categoria') == categoria.slug %}selected{% endif %}>{{ categoria.nome }}</option>
+    {% endfor %}
+  </select>
+  </label>
+  <label>Tamanho
+    <input type="text" name="tamanho" placeholder="P, M, 35..." value="{{ filtros.get('tamanho', '') }}">
+  </label>
+  <label>Cor
+    <input type="text" name="cor" placeholder="Rosa" value="{{ filtros.get('cor', '') }}">
+  </label>
+  <label>Preço mín.
+    <input type="number" min="0" step="0.01" name="preco_min" placeholder="0" value="{{ filtros.get('preco_min', '') }}">
+  </label>
+  <label>Preço máx.
+    <input type="number" min="0" step="0.01" name="preco_max" placeholder="200" value="{{ filtros.get('preco_max', '') }}">
+  </label>
+  <button class="btn btn-secondary" type="submit">Filtrar</button>
+</form>
+
+{% include "store/partials/product_grid.html" %}
+{% endblock %}

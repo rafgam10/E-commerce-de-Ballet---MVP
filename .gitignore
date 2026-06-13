@@ -11,6 +11,4 @@ build/
 .idea/
 .vscode/
 
-# Pasta de Tests.
-/tests
-src/tests/**.py
+# Testes do projeto devem ser versionados.

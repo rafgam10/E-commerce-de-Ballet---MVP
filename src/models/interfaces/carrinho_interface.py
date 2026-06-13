@@ -1,10 +1,24 @@
 from abc import ABC, abstractmethod
 
+
 class ICarrinho(ABC):
-    
+
     @abstractmethod
-    def visualizar_carrinho_ativo(): pass
-    
+    def adicionar_produto_carrinho(self):
+        pass
+
     @abstractmethod
-    def analisar_abandono_carrinho(): pass
-    
+    def remover_produto_do_carrinho(self):
+        pass
+
+    @abstractmethod
+    def atualizar_quantidade(self):
+        pass
+
+    @abstractmethod
+    def visualizar_carrinho_ativo(self):
+        pass
+
+    @abstractmethod
+    def analisar_abandono_carrinho():
+        pass

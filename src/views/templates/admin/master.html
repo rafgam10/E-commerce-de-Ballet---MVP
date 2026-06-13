@@ -1,0 +1,139 @@
+{% extends admin_base_template %}
+
+{% block brand %}
+  <a class="navbar-brand admin-brand" href="{{ admin_view.admin.url }}">
+    <img src="{{ url_for('static', filename='imagens/logo.png') }}" alt="Ballet Boutique">
+    <span>Ballet Boutique Admin</span>
+  </a>
+{% endblock %}
+
+{% block head_tail %}
+  {{ super() }}
+  <style>
+    .admin-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      font-weight: 700;
+    }
+
+    .admin-brand img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: white;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .18);
+    }
+
+    .admin-dashboard {
+      color: #2d1723;
+      padding-bottom: 2rem;
+    }
+
+    .admin-dashboard .admin-hero,
+    .admin-dashboard .admin-stat-card,
+    .admin-dashboard .admin-panel,
+    .admin-dashboard .admin-quick-actions {
+      border: 1px solid rgba(180, 58, 115, .14);
+      border-radius: 26px;
+      box-shadow: 0 20px 55px rgba(57, 23, 40, .10);
+    }
+
+    .admin-dashboard .admin-hero {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: center;
+      padding: 34px;
+      margin: 24px 0;
+      background: linear-gradient(135deg, #39172a, #9f346b 62%, #f2b9d2);
+      color: white;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .admin-dashboard .admin-hero:after {
+      content: "";
+      position: absolute;
+      right: 34px;
+      bottom: -70px;
+      width: 210px;
+      height: 210px;
+      border: 1px solid rgba(255, 255, 255, .24);
+      border-radius: 50%;
+    }
+
+    .admin-dashboard .admin-hero h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      margin: .2rem 0 .55rem;
+    }
+
+    .admin-dashboard .admin-hero p { margin: 0; color: rgba(255, 255, 255, .82); }
+    .admin-dashboard .admin-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; z-index: 1; }
+    .admin-dashboard .admin-kicker { text-transform: uppercase; letter-spacing: .14em; font-size: .72rem; font-weight: 800; }
+
+    .admin-dashboard .admin-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .admin-dashboard .admin-stat-card { background: white; padding: 22px; position: relative; overflow: hidden; }
+    .admin-dashboard .admin-stat-card:before { content: ""; position: absolute; inset: 0 auto 0 0; width: 6px; }
+    .admin-dashboard .admin-stat-card span { color: #7f6270; font-weight: 800; }
+    .admin-dashboard .admin-stat-card strong { display: block; font-size: 2rem; margin: .35rem 0; color: #321824; }
+    .admin-dashboard .admin-stat-card small { color: #8c7781; }
+    .admin-dashboard .accent-pink:before { background: #b43a73; }
+    .admin-dashboard .accent-gold:before { background: #d89b39; }
+    .admin-dashboard .accent-plum:before { background: #5b2b73; }
+    .admin-dashboard .accent-rose:before { background: #e2769f; }
+
+    .admin-dashboard .admin-panel-grid {
+      display: grid;
+      grid-template-columns: 1.35fr .85fr;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .admin-dashboard .admin-panel { background: rgba(255, 255, 255, .92); padding: 22px; }
+    .admin-dashboard .admin-panel.wide { grid-row: span 2; }
+    .admin-dashboard .admin-panel-title { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 14px; }
+    .admin-dashboard .admin-panel-title h2 { margin: 0; font-family: Georgia, serif; }
+    .admin-dashboard .admin-panel-title a { color: #9b2f65; font-weight: 800; }
+
+    .admin-dashboard .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-dashboard .admin-table th, .admin-dashboard .admin-table td { border-bottom: 1px solid #f0d9e4; padding: 13px 10px; }
+    .admin-dashboard .admin-table th { color: #7f6270; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
+    .admin-dashboard .admin-status { background: #f6dce8; color: #8e2457; border-radius: 999px; padding: 5px 10px; font-weight: 800; }
+
+    .admin-dashboard .admin-list { display: grid; gap: 12px; }
+    .admin-dashboard .admin-list-item { display: flex; justify-content: space-between; gap: 12px; padding: 12px; border-radius: 16px; background: #fff7fb; }
+    .admin-dashboard .admin-list-item strong { display: block; }
+    .admin-dashboard .admin-list-item span { display: block; color: #7f6270; font-size: .88rem; }
+    .admin-dashboard .admin-list-item b { color: #9b2f65; font-size: 1.2rem; }
+
+    .admin-dashboard .admin-quick-actions { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; background: white; padding: 14px; margin: 0 0 40px; }
+    .admin-dashboard .admin-quick-actions a { text-align: center; border-radius: 16px; background: #f6dce8; color: #7a214d; padding: 13px; font-weight: 800; }
+    .admin-dashboard .admin-quick-actions a:hover { background: #b43a73; color: white; text-decoration: none; }
+
+    @media (max-width: 900px) {
+      .admin-dashboard .admin-hero,
+      .admin-dashboard .admin-panel-title { align-items: flex-start; flex-direction: column; }
+      .admin-dashboard .admin-stat-grid,
+      .admin-dashboard .admin-panel-grid,
+      .admin-dashboard .admin-quick-actions { grid-template-columns: 1fr; }
+      .admin-dashboard .admin-panel.wide { grid-row: auto; }
+    }
+  </style>
+{% endblock %}
+
+{% block access_control %}
+  {{ super() }}
+  <form action="{{ url_for('admin_api.admin_logout') }}" method="post" class="form-inline ml-2">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="btn btn-outline-light btn-sm">Sair</button>
+  </form>
+{% endblock %}
